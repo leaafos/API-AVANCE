@@ -1,5 +1,7 @@
 ### Collection GET
 GET http://localhost:3000/tasks
+Accept: text/xml
+# on donne par ordre de priorité les formats acceptés
 
 ### Collection POST
 POST http://localhost:3000/tasks
@@ -11,6 +13,7 @@ Content-Type: application/json
 
 ### Item GET
 GET http://localhost:3000/tasks/1
+Accept : text/xml
 
 ### Item PUT : replace
 PUT http://localhost:3000/tasks/1

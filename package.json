@@ -10,11 +10,13 @@
     "migrate": "node migrate.js",
     "dev": "node --watch server.js",
     "dev:windows": "nodemon -L server.js",
-    "test": "echo \"Error: no test specified\" && exit 1" 
-  }, 
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "express": "^5.2.1",
+    "papaparse": "^5.5.3",
     "pg": "^8.16.3",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "xml2js": "^0.6.2"
   }
 }

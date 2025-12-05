@@ -1,18 +1,31 @@
 const TaskModel = require('../models/task.js');
+const Papa = require('papaparse');
 
 module.exports = {
     cget: async (req, res, next) => {
-        res.json(await TaskModel.findAll());
+        const items = await TaskModel.findAll();
+        // res.format({
+        //     'text/csv' (){
+        //         const csv = Papa.unparse(items.map ((itemOrm) => itemOrm.dataValues));
+        //         res.setHeader('Content-Type', 'text/csv');
+        //         res.send(csv);
+        //     },
+        //     default (){
+        //         res.render(items);
+        //     },
+        // });
+        res.render(items);
     },
     post: async (req, res, next) => {
         const newData = req.body;
         const newTask = await TaskModel.create(newData);
-        res.status(201).json(newTask);
+        res.status(201).render(newTask);
+
     },
     get: async (req, res, next) => {
         const task = await TaskModel.findByPk(req.params.id);
         if (task) {
-            res.json(task);
+            res.render(task);
         } else {
             res.sendStatus(404);
         }
@@ -25,7 +38,7 @@ module.exports = {
         });
         const newData = req.body;
         const newTask = await TaskModel.create({id: req.params.id, ...newData});
-        res.status(nbDeleted === 1 ? 200 : 201).json(newTask);
+        res.status(nbDeleted === 1 ? 200 : 201).render(newTask);
         },
     patch: async (req, res, next) => {
         const [nbUpdated, [updatedTask]] = await TaskModel.update(req.body, {
@@ -37,7 +50,7 @@ module.exports = {
         if (nbUpdated === 0) {
             res.sendStatus(404);
         } else {
-            res.json(updatedTask);
+            res.render(updatedTask);
         }
 
         // MYSQL
@@ -45,7 +58,7 @@ module.exports = {
         //     res.sendStatus(404);
         // } else {
         //     const task = await TaskModel.findByPk(req.params.id);
-        //     res.json(task);
+        //     res.render(task);
         // }
     },
     delete: async (req, res, next) => {
