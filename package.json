@@ -7,7 +7,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "migrate": "node migrate.js",
     "dev": "node --watch server.js",
+    "dev:windows": "nodemon -L server.js",
     "test": "echo \"Error: no test specified\" && exit 1" 
   }, 
   "dependencies": {
