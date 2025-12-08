@@ -1,10 +1,16 @@
 const {Router}= require('express');
 const TaskController =  require('../controllers/task.js');
 const router = new Router();
+const version = require('../middlewares/versioningMiddleware.js');
 
 // Collection GET
 // Http Code : 200
-router.get("/tasks", TaskController.cget);
+router.get("/tasks", 
+    version({
+        v1: TaskController.cgetV1, 
+        v2:TaskController.cgetV2, 
+        default: TaskController.cget
+    }));
 
 // Collection POST
 // Http Code : 201

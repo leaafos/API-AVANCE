@@ -1,26 +1,87 @@
+const initTranslation = require('../lib/i18next.js');
+const getAskedVersion = require('../lib/versioning.js');
 const TaskModel = require('../models/task.js');
 const Papa = require('papaparse');
 
 module.exports = {
-    cget: async (req, res, next) => {
+    // cget: async (req, res, next) => {
+    //     const apiVersion = getAskedVersion(req);
+    //     const items = await TaskModel.findAll();
+
+    //     switch (apiVersion) {
+    //         case '1':
+    //             res.render(items);
+    //             return;
+    //         case '2':
+    //             res.render(
+    //                 items.map((item) => {
+    //                     item.dataValues.completed_trad = res.trad(item.completed
+    //                         ? "completed"
+    //                         : "not-completed"
+    //                     );
+    //                     return item;
+    //                 })
+    //             )
+    //         case '3':
+    //         default:
+    //             res.render(
+    //                 items.map((item) => {
+    //                     item.dataValues.completed = trad(
+    //                         item.completed ? "completed" : "not-completed"
+    //                     );
+    //                     return item;
+    //                 })
+    //             );
+    //             return;
+    //         }
+    // },
+        // const trad = initTranslation(req);
+        // const items = await TaskModel.findAll();
+        // res.render(
+        //     items.map((item) => {
+        //         item.dataValues.completed_trad = item.completed
+        //         ? "completed"
+        //         : "not-completed";
+        //         return item;
+        //     })
+        // );
+    cget : async (req, res, next) => {
+        const apiVersion = getAskedVersion(req);
         const items = await TaskModel.findAll();
-        // res.format({
-        //     'text/csv' (){
-        //         const csv = Papa.unparse(items.map ((itemOrm) => itemOrm.dataValues));
-        //         res.setHeader('Content-Type', 'text/csv');
-        //         res.send(csv);
-        //     },
-        //     default (){
-        //         res.render(items);
-        //     },
-        // });
+        res.render(
+            items.map((item) => {
+                item.dataValues.completed_trad = res.trad(item.completed
+                    ? "completed"
+                    : "not-completed"
+                );
+                return item;
+            })
+        );
+    },
+
+    cgetV2 : async (req, res, next) => {
+        const trad = initTranslation(req);
+        const items = await TaskModel.findAll();
+        res.render(
+            items.map((item) => {
+                item.dataValues.completed_trad = trad(item.completed
+                ? "completed"
+                : "not-completed");
+                return item;
+            })
+        );
+    },
+
+    cgetV1 : async (req, res, next) => {
+        const items = await TaskModel.findAll();
         res.render(items);
     },
+    
+  
     post: async (req, res, next) => {
         const newData = req.body;
         const newTask = await TaskModel.create(newData);
         res.status(201).render(newTask);
-
     },
     get: async (req, res, next) => {
         const task = await TaskModel.findByPk(req.params.id);
@@ -52,7 +113,6 @@ module.exports = {
         } else {
             res.render(updatedTask);
         }
-
         // MYSQL
         // if(result === 0){
         //     res.sendStatus(404);
